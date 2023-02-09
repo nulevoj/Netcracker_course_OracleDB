@@ -1,0 +1,28 @@
+name: PLSQL Unit Testing
+on:
+ # оброка лише події типу push
+ push:
+  # обробка подій лише для LW14-гілки
+  branches: LW14
+jobs:
+ TestCases:
+  # використання Docker-image із вказаною версією ОС
+  runs-on: ubuntu-latest
+  steps:
+  - name: Checkout
+    # клонування репозиторія для подальшої роботи з файлами на сервері 
+    # в каталозі $GITHUB_WORKSPACE
+    uses: "actions/checkout@v3"
+  - name: Compile
+    # виконання декількох послідовних команд shell-інтерпретатором
+    run: |
+      cd $GITHUB_WORKSPACE/Lab14/
+      export CLASSPATH="./ojdbc8.jar:./"
+      javac PLSQLUnitTesting.java
+  - name: Execute
+    # виконання декількох послідовних команд shell-інтерпретатором
+    run: |
+      cd $GITHUB_WORKSPACE/Lab14/
+      export CLASSPATH="./ojdbc8.jar:./"
+      java PLSQLUnitTesting ${{ secrets.LOGIN }} ${{ secrets.PASSWORD }}
+      
